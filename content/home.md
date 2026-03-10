@@ -4,7 +4,7 @@ instagram_url: https://www.instagram.com/gubomaquinaria/
 ---
 
 [lang:es]
-# El poder de la desbrozadora forestal
+# El poder del desbroce en tus manos
 
 Maquinaria profesional para jardín, zona verde y mantenimiento general. Compactas y potentes, concebidas para el mantenimiento de zonas verdes donde las máquinas tradicionales no son convenientes.
 
@@ -14,7 +14,7 @@ Maquinaria profesional para jardín, zona verde y mantenimiento general. Compact
 [/lang:es]
 
 [lang:en]
-# The power of the forestry mower
+# The power of the forestry mower at your fingertips
 
 Professional machinery for garden, green area and general maintenance. Compact and powerful, designed for the maintenance of green areas where traditional machines are not suitable.
 
