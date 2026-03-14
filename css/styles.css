@@ -366,7 +366,7 @@ a:hover {
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-top: 4rem;
-  align-items: center;
+  align-items: stretch;
 }
 
 .media-card {
@@ -737,7 +737,37 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .nav-links { display: none; }
+  .nav-links { 
+    display: none; 
+    flex-direction: column;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    width: 100%;
+    background: rgba(22, 27, 34, 0.95);
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links .dropdown-menu {
+    position: static;
+    transform: none;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    margin-top: 0;
+    padding-left: 1rem;
+    display: none;
+    flex-direction: column;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: none; /* override hover on mobile, let JS handle it */
+  }
+
   .mobile-menu-btn { display: block; }
   h1 { font-size: 2.5rem; }
   h2 { font-size: 2rem; }
