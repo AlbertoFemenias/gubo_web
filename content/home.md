@@ -1,6 +1,6 @@
 ---
 youtube_id: rlP2mI5YKQ0
-instagram_url: https://www.instagram.com/gubomaquinaria/
+instagram_url: https://www.instagram.com/car/
 ---
 
 [lang:es]

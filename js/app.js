@@ -184,7 +184,7 @@ const App = {
             <iframe src="https://www.youtube.com/embed/${page.meta.youtube_id || 'rlP2mI5YKQ0'}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="media-card home-media instagram-wrapper">
-            <blockquote class="instagram-media" data-instgrm-permalink="${page.meta.instagram_url || 'https://www.instagram.com/gubomaquinaria/'}" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="${page.meta.instagram_url || 'https://www.instagram.com/car/'}" data-instgrm-version="14"></blockquote>
           </div>
         </div>
         
