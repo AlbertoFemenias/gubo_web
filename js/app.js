@@ -96,8 +96,8 @@ const App = {
     // Update static UI translations
     const i18nElements = document.querySelectorAll('[data-i18n]');
     const dict = {
-      es: { nav_home: 'Inicio', nav_products: 'Maquinaria', nav_contact: 'Contacto' },
-      en: { nav_home: 'Home', nav_products: 'Machinery', nav_contact: 'Contact' }
+      es: { nav_home: 'Inicio', nav_products: 'Maquinaria', nav_gallery: 'Galería', nav_contact: 'Contacto' },
+      en: { nav_home: 'Home', nav_products: 'Machinery', nav_gallery: 'Gallery', nav_contact: 'Contact' }
     };
     
     i18nElements.forEach(el => {
@@ -126,6 +126,8 @@ const App = {
         await this.renderProductDetail(id);
       } else if (hash === 'contact') {
         await this.renderContact();
+      } else if (hash === 'gallery') {
+        await this.renderGallery();
       } else {
         window.location.hash = '#home';
       }
@@ -187,17 +189,15 @@ const App = {
             <blockquote class="instagram-media" data-instgrm-permalink="${page.meta.instagram_url || 'https://www.instagram.com/car/'}" data-instgrm-version="14"></blockquote>
           </div>
         </div>
-        
-        <!-- Home Carousel -->
-        <div class="home-carousel">
-          <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
-          <div class="carousel-track" id="home-carousel-track">
-            <img src="assets/machine_action.png" class="carousel-slide" alt="Action shot 1">
-            <img src="initial_resources/photos/machine_in_the_field.webp" class="carousel-slide" alt="Action shot 2">
-            <img src="initial_resources/photos/machines_back.jpg" class="carousel-slide" alt="Action shot 3">
+                <!-- Home Carousel -->
+          <div class="home-carousel">
+            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track" id="home-carousel-track">
+              <img src="assets/machine_action.png" class="carousel-slide" alt="Action shot 1" title="Ver galería" style="cursor:pointer" onclick="window.location.hash='#gallery'">
+              <img src="assets/hero_bg.png" class="carousel-slide" alt="Action shot 2" title="Ver galería" style="cursor:pointer" onclick="window.location.hash='#gallery'">
+            </div>
+            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
           </div>
-          <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
-        </div>
         
       </div>
     `;
@@ -312,6 +312,54 @@ const App = {
         </div>
       </div>
     `;
+  },
+
+  async renderGallery() {
+    // Collect all images from product markdown files
+    let allImages = [];
+    for (const prodId of this.config.products) {
+      try {
+        const page = await this.fetchMarkdown(`content/products/${prodId}.md`);
+        const imgs = page.meta.images || [];
+        allImages = allImages.concat(imgs);
+      } catch(e) { /* skip */ }
+    }
+    // Add standalone assets
+    const standalone = this.config.gallery_images || [];
+    allImages = allImages.concat(standalone);
+    // Remove duplicates
+    allImages = [...new Set(allImages)];
+
+    const title = this.lang === 'es' ? 'Galería' : 'Gallery';
+    const noPhotos = this.lang === 'es' ? 'No hay fotos en la galería todavía.' : 'No photos in the gallery yet.';
+
+    const itemsHtml = allImages.length > 0
+      ? allImages.map((src, i) => `
+          <div class="gallery-item" onclick="App.openLightbox('${src}')">
+            <img src="${src}" alt="Gallery photo ${i+1}" loading="lazy">
+            <div class="overlay"><i class="fas fa-expand"></i></div>
+          </div>`).join('')
+      : `<p style="color: var(--text-secondary); margin-top: 2rem;">${noPhotos}</p>`;
+
+    this.contentEl.innerHTML = `
+      <div class="page-container">
+        <h2 class="section-title">${title}</h2>
+        <div class="gallery-grid">${itemsHtml}</div>
+      </div>
+    `;
+  },
+
+  openLightbox(src) {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.innerHTML = `
+      <button class="lightbox-close" onclick="this.parentElement.remove()" aria-label="Close">&times;</button>
+      <img src="${src}" alt="Gallery photo">
+    `;
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb) lb.remove();
+    });
+    document.body.appendChild(lb);
   },
 
   async renderContact() {

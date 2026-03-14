@@ -2,9 +2,9 @@
 title_es: Modelo 80
 title_en: Model 80
 images:
+  - "initial_resources/photos/machines_back.jpg"
   - "initial_resources/photos/machine_front.webp"
   - "initial_resources/photos/machine_in_the_field.webp"
-  - "initial_resources/photos/machines_back.jpg"
   - "initial_resources/photos/remote_control.webp"
 downloads_es:
   - name: Ficha Técnica (PDF)

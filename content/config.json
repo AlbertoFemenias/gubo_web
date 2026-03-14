@@ -3,5 +3,14 @@
     "modelo-80", 
     "modelo-100", 
     "modelo-100pro"
+  ],
+  "gallery_images": [
+    "assets/machine_action.png",
+    "assets/hero_bg.png",
+    "initial_resources/photos/DJI_20260217131925_0055_D.JPG",
+    "initial_resources/photos/machine_front.webp",
+    "initial_resources/photos/machine_in_the_field.webp",
+    "initial_resources/photos/machines_back.jpg",
+    "initial_resources/photos/remote_control.webp"
   ]
 }
