@@ -180,11 +180,11 @@ const App = {
       <div class="page-container hero">
         ${page.html}
         <div class="media-grid">
-          <div class="media-card" style="min-height: 480px; display: flex;">
-            <iframe src="https://www.youtube.com/embed/${page.meta.youtube_id || 'rlP2mI5YKQ0'}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: 100%; min-height: 480px; border: 0; flex-grow: 1;"></iframe>
+          <div class="media-card home-media iframe-wrapper">
+            <iframe src="https://www.youtube.com/embed/${page.meta.youtube_id || 'rlP2mI5YKQ0'}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
-          <div class="media-card" style="min-height: 480px; display: flex; align-items: center; justify-content: center; background: #fff;">
-            <blockquote class="instagram-media" data-instgrm-permalink="${page.meta.instagram_url || 'https://www.instagram.com/gubomaquinaria/'}" data-instgrm-version="14" style="background:#FFF; border:0; margin: 0; padding:0; width:100%; max-width: 540px;"></blockquote>
+          <div class="media-card home-media instagram-wrapper">
+            <blockquote class="instagram-media" data-instgrm-permalink="${page.meta.instagram_url || 'https://www.instagram.com/gubomaquinaria/'}" data-instgrm-version="14"></blockquote>
           </div>
         </div>
         

@@ -376,22 +376,32 @@ a:hover {
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.media-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0,230,118,0.2);
+.home-media {
+  min-height: 480px;
+  display: flex;
+  background: #fff;
 }
 
-.video-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  height: 0;
-}
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
+.home-media.iframe-wrapper iframe {
   width: 100%;
   height: 100%;
+  min-height: 480px;
+  border: 0;
+  flex-grow: 1;
+}
+
+.home-media.instagram-wrapper {
+  align-items: center;
+  justify-content: center;
+}
+
+.home-media.instagram-wrapper blockquote {
+  background: #fff;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 540px;
 }
 
 .instagram-container {
@@ -769,11 +779,28 @@ footer {
   }
 
   .mobile-menu-btn { display: block; }
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  .hero p { font-size: 1.1rem; }
+  .brand img { height: 120px; margin-top: 40px; }
+  
+  .hero { padding: 5rem 1rem 3rem; }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.8rem; }
+  .hero p { font-size: 1rem; }
+  
   .media-grid, .product-detail, .contact-wrapper {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .home-media {
+    min-height: 350px;
+  }
+  
+  .home-media.iframe-wrapper iframe {
+    min-height: 350px;
+  }
+  
+  .carousel-slide {
+    height: 300px;
   }
 }
