@@ -1,0 +1,29 @@
+title:
+  ES: "Contacto"
+  EN: "Contact Us"
+
+description:
+  ES: "Estamos aquí para ayudarte. Ponte en contacto con nosotros para cualquier consulta técnica o comercial."
+  EN: "We are here to help. Get in touch with us for any technical or commercial queries."
+
+info:
+  phone: "+34 602 05 76 91"
+  email: "contacto@gubo.es"
+
+social:
+  instagram: "https://www.instagram.com/gubomaquinaria/"
+  youtube: "https://www.youtube.com/@GUBO_Web"
+
+form_labels:
+  name:
+    ES: "Nombre"
+    EN: "Name"
+  email:
+    ES: "Correo electrónico"
+    EN: "Email"
+  message:
+    ES: "Mensaje"
+    EN: "Message"
+  submit:
+    ES: "Enviar Mensaje"
+    EN: "Send Message"

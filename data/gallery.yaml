@@ -1,0 +1,17 @@
+title:
+  ES: "Galería de imágenes"
+  EN: "Image Gallery"
+
+description:
+  ES: "Descubre nuestra maquinaria en acción."
+  EN: "Discover our machinery in action."
+
+images:
+  - "assets/images/machine_front.webp"
+  - "assets/images/machine_in_the_field.webp"
+  - "assets/images/machine_with_remote_control.webp"
+  - "assets/images/landscape.jpg"
+  - "assets/images/machine_back.jpg"
+  - "assets/images/machine_in_the_field.webp"
+  - "assets/images/machine_with_remote_control.webp"
+  - "assets/images/machine_front.webp"

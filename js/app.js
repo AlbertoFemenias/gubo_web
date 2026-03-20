@@ -1,399 +1,340 @@
-const App = {
-  lang: 'es',
-  config: null,
-  contentEl: document.getElementById('app-content'),
+const app = {
+    currentLang: 'ES',
+    config: null,
+    cache: {},
 
-  async init() {
-    this.setupEvents();
-    
-    // Load global config
-    try {
-      const res = await fetch('content/config.json');
-      this.config = await res.json();
-    } catch(e) {
-      console.error('Failed to load config.json', e);
-      this.contentEl.innerHTML = '<div class="page-container"><h2>Error loading application configuration.</h2></div>';
-      return;
-    }
-
-    this.detectLanguage();
-    this.populateDropdown();
-    
-    // Handle initial route
-    this.handleRoute();
-    
-    // Add year to footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-  },
-
-  setupEvents() {
-    window.addEventListener('hashchange', () => this.handleRoute());
-    
-    document.getElementById('lang-es').addEventListener('click', () => this.setLanguage('es'));
-    document.getElementById('lang-en').addEventListener('click', () => this.setLanguage('en'));
-
-    // Mobile menu toggle
-    const mobileBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    if (mobileBtn && navLinks) {
-      mobileBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        // Ensure dropdown menus are hidden initially
-        navLinks.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = '');
-      });
-      // Close mobile menu on link click (unless it's a dropdown toggle)
-      navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (e) => {
-          if (link.nextElementSibling && link.nextElementSibling.classList.contains('dropdown-menu')) {
-            // It's a mobile dropdown -> toggle it
-            e.preventDefault();
-            const menu = link.nextElementSibling;
-            if (window.innerWidth <= 768) {
-              menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-            }
-          } else {
-            // Close mobile menu
-            navLinks.classList.remove('active');
-          }
-        });
-      });
-    }
-  },
-
-  populateDropdown() {
-    const dropMenu = document.getElementById('products-dropdown');
-    if (!dropMenu) return;
-    
-    dropMenu.innerHTML = this.config.products.map(p => {
-      // Create a nice display name: "modelo-80" -> "Modelo 80"
-      const name = p.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
-      return `<a href="#product/${p}">${name}</a>`;
-    }).join('');
-  },
-
-  detectLanguage() {
-    const saved = localStorage.getItem('gubo_lang');
-    if (saved) {
-      this.lang = saved;
-    } else {
-      this.lang = 'es';
-    }
-    this.updateLangUI();
-  },
-
-  setLanguage(lang) {
-    if (this.lang === lang) return;
-    this.lang = lang;
-    localStorage.setItem('gubo_lang', lang);
-    this.updateLangUI();
-    this.handleRoute(); // re-render view
-  },
-
-  updateLangUI() {
-    document.getElementById('lang-es').classList.toggle('active', this.lang === 'es');
-    document.getElementById('lang-en').classList.toggle('active', this.lang === 'en');
-    
-    // Update static UI translations
-    const i18nElements = document.querySelectorAll('[data-i18n]');
-    const dict = {
-      es: { nav_home: 'Inicio', nav_products: 'Maquinaria', nav_gallery: 'Galería', nav_contact: 'Contacto' },
-      en: { nav_home: 'Home', nav_products: 'Machinery', nav_gallery: 'Gallery', nav_contact: 'Contact' }
-    };
-    
-    i18nElements.forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (dict[this.lang][key]) el.textContent = dict[this.lang][key];
-    });
-  },
-
-  async handleRoute() {
-    let hash = window.location.hash.substring(1) || 'home';
-    
-    // Update nav active state
-    document.querySelectorAll('.nav-links a').forEach(a => {
-      a.classList.toggle('active', a.getAttribute('href') === `#${hash.split('/')[0]}`);
-    });
-
-    this.contentEl.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
-
-    try {
-      if (hash === 'home') {
-        await this.renderHome();
-      } else if (hash === 'products') {
-        await this.renderProductsList();
-      } else if (hash.startsWith('product/')) {
-        const id = hash.split('/')[1];
-        await this.renderProductDetail(id);
-      } else if (hash === 'contact') {
-        await this.renderContact();
-      } else if (hash === 'gallery') {
-        await this.renderGallery();
-      } else {
-        window.location.hash = '#home';
-      }
-    } catch(err) {
-      console.error(err);
-      this.contentEl.innerHTML = `<div class="page-container"><h2>Error loading page</h2><p>${err.message}</p></div>`;
-    }
-  },
-
-  async fetchMarkdown(path) {
-    const res = await fetch(path);
-    if (!res.ok) throw new Error(`Not found: ${path}`);
-    const text = await res.text();
-    return this.parseMarkdown(text);
-  },
-
-  parseMarkdown(content) {
-    // Basic frontmatter parser
-    let meta = {};
-    let body = content;
-    
-    if (content.startsWith('---')) {
-      const match = content.match(/---\n([\s\S]+?)\n---/);
-      if (match) {
-        try {
-          meta = jsyaml.load(match[1]);
-          body = content.replace(match[0], '');
-        } catch(e) {
-          console.error("YAML parsing error", e);
-        }
-      }
-    }
-
-    // Extract the specific language part
-    // We expect sections like [lang:es] ... [/lang:es]
-    const langRegex = new RegExp(`\\[lang:${this.lang}\\]([\\s\\S]*?)\\[\\/lang:${this.lang}\\]`, 'i');
-    const langMatch = body.match(langRegex);
-    
-    let localizedBody = langMatch ? langMatch[1] : body; // Fallback to all content if no tags
-    
-    return {
-      meta,
-      html: marked.parse(localizedBody),
-      rawMd: localizedBody
-    };
-  },
-
-  async renderHome() {
-    const page = await this.fetchMarkdown('content/home.md');
-    
-    this.contentEl.innerHTML = `
-      <div class="page-container hero">
-        ${page.html}
-        <div class="media-grid">
-          <div class="media-card home-media iframe-wrapper">
-            <iframe src="https://www.youtube.com/embed/${page.meta.youtube_id || 'rlP2mI5YKQ0'}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          <div class="media-card home-media instagram-wrapper">
-            <blockquote class="instagram-media" data-instgrm-permalink="${page.meta.instagram_url || 'https://www.instagram.com/car/'}" data-instgrm-version="14"></blockquote>
-          </div>
-        </div>
-                <!-- Home Carousel -->
-          <div class="home-carousel">
-            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track" id="home-carousel-track">
-              <img src="assets/machine_action.png" class="carousel-slide" alt="Action shot 1" title="Ver galería" style="cursor:pointer" onclick="window.location.hash='#gallery'">
-              <img src="assets/hero_bg.png" class="carousel-slide" alt="Action shot 2" title="Ver galería" style="cursor:pointer" onclick="window.location.hash='#gallery'">
-            </div>
-            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
-          </div>
+    setLanguage(lang) {
+        this.currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`lang-${lang.toLowerCase()}`).classList.add('active');
         
-      </div>
-    `;
+        // Update nav and current view
+        if(this.config) this.renderNav();
+        this.handleRoute();
+    },
 
-    // Process Instagram embed script
-    if (window.instgrm) {
-      setTimeout(() => window.instgrm.Embeds.process(), 100);
+    async fetchYaml(url) {
+        if(this.cache[url]) return this.cache[url];
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('File not found');
+            const text = await response.text();
+            const data = jsyaml.load(text);
+            this.cache[url] = data;
+            return data;
+        } catch (e) {
+            console.error('Error loading YAML:', e);
+            document.getElementById('app-content').innerHTML = `
+                <div class="section container">
+                    <h2 class="section-title">Error 404</h2>
+                    <p class="section-subtitle">Content not found.</p>
+                </div>`;
+            return null;
+        }
+    },
+
+    getText(obj) {
+        if (!obj) return '';
+        if (typeof obj === 'string') return obj;
+        return obj[this.currentLang] || '';
+    },
+
+    async init() {
+        // Setup Mobile Menu Toggle
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+            document.getElementById('nav-links').classList.toggle('active');
+        });
+
+        // Set Date
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        this.config = await this.fetchYaml('data/config.yaml');
+        if (this.config) {
+            this.renderNav();
+        }
+
+        window.addEventListener('hashchange', () => this.handleRoute());
+        this.handleRoute(); // initial
+    },
+
+    renderNav() {
+        const nav = document.getElementById('nav-links');
+        const items = this.config.nav;
+        
+        nav.innerHTML = `
+            <a href="#home">${this.getText(items.home)}</a>
+            <a href="#products">${this.getText(items.products)}</a>
+            <a href="#gallery">${this.getText(items.gallery)}</a>
+            <a href="#contact">${this.getText(items.contact)}</a>
+        `;
+        
+        // Update footer copyright logo slogan if any
+        document.title = this.config.site_name || 'GUBO Maquinaria';
+    },
+
+    showLoader() {
+        document.getElementById('app-content').innerHTML = `
+            <div class="loader">${this.currentLang === 'ES' ? 'Cargando...' : 'Loading...'}</div>`;
+    },
+
+    updateActiveNav(hash) {
+        const base = hash.split('/')[0] || 'home';
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            if(a.getAttribute('href') === '#' + base) a.classList.add('active');
+            else a.classList.remove('active');
+        });
+        document.getElementById('nav-links').classList.remove('active');
+    },
+
+    async handleRoute() {
+        const rawHash = window.location.hash.substring(1) || 'home';
+        this.updateActiveNav(rawHash);
+        this.showLoader();
+
+        const parts = rawHash.split('/');
+        const route = parts[0];
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+
+        if (route === 'home') await this.renderHome();
+        else if (route === 'products') {
+            if (parts[1]) await this.renderProduct(parts[1]);
+            else await this.renderProducts();
+        }
+        else if (route === 'gallery') await this.renderGallery();
+        else if (route === 'contact') await this.renderContact();
+        else await this.renderHome();
+    },
+
+    async renderHome() {
+        const data = await this.fetchYaml('data/home.yaml');
+        if(!data) return;
+        
+        const html = `
+            <div class="hero-section" style="background-image: url('${data.hero_bg}')">
+                <div class="hero-overlay"></div>
+                <div class="hero-content container">
+                    <h1 class="hero-title">${this.getText(data.hero_title)}</h1>
+                    <p class="hero-subtitle">${this.getText(data.hero_subtitle)}</p>
+                    <a href="#products" class="btn btn-primary">${this.getText(this.config.buttons.read_more)}</a>
+                </div>
+            </div>
+            
+            <div class="container section">
+                <div class="media-embeds">
+                    <div class="embed-container">
+                        <h3>${this.getText(data.social_embeds.youtube.title)}</h3>
+                        <div class="video-wrapper">
+                            <iframe src="${data.social_embeds.youtube.url}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="embed-container">
+                        <h3>${this.getText(data.social_embeds.instagram.title)}</h3>
+                        <div class="insta-wrapper">
+                            <!-- Instagram Embed Block (we use an iframe fallback for reliability if official embed blocks) -->
+                            <iframe src="${data.social_embeds.instagram.url}embed" scrolling="no" allowtransparency="true"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
+    },
+
+    async renderProducts() {
+        const data = await this.fetchYaml('data/products.yaml');
+        if(!data) return;
+
+        let itemsHtml = '';
+        
+        for(let item of data.items) {
+             const pData = await this.fetchYaml(item.file);
+             if(pData) {
+                 itemsHtml += `
+                 <a href="#products/${item.id}" class="product-card">
+                    <img class="product-image" src="${pData.images[0]}" alt="${pData.name}">
+                    <div class="product-content">
+                        <h3 class="product-title">${pData.name}</h3>
+                        <p class="product-desc">${this.getText(pData.description)}</p>
+                        <span class="btn btn-primary" style="align-self: flex-start; margin-top: 1rem;">${this.getText(this.config.buttons.read_more)}</span>
+                    </div>
+                 </a>
+                 `;
+             }
+        }
+
+        const html = `
+            <div class="container section">
+                <h2 class="section-title">${this.getText(data.title)}</h2>
+                <p class="section-subtitle">${this.getText(data.description)}</p>
+                <div class="products-grid">
+                    ${itemsHtml}
+                </div>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
+    },
+
+    async renderProduct(id) {
+        const cat = await this.fetchYaml('data/products.yaml');
+        if(!cat) return;
+        const mapped = cat.items.find(i => i.id === id);
+        if(!mapped) { this.renderProducts(); return; }
+
+        const data = await this.fetchYaml(mapped.file);
+        if(!data) return;
+        
+        let thumbHtml = data.images.map((img, idx) => `
+            <img class="product-thumb ${idx===0?'active':''}" src="${img}" onclick="app.setMainImg('${img}', this)">
+        `).join('');
+
+        let specsHtml = data.specs.map(s => `<li>${this.getText(s)}</li>`).join('');
+        
+        let dlHtml = data.downloads ? data.downloads.map(dl => `<a href="${dl.url}" target="_blank" class="btn btn-outline" download>${this.getText(dl.label)}</a>`).join('') : '';
+
+        const html = `
+            <div class="container section">
+                <a href="#products" style="margin-bottom: 2rem; display: inline-block; font-weight: 500;">&larr; ${this.currentLang==='ES'?'Volver a Maquinaria':'Back to Products'}</a>
+                
+                <div class="product-detail-layout">
+                    <div class="product-gallery">
+                        <img id="main-product-img" class="product-main-img" src="${data.images[0]}">
+                        <div class="product-thumbs">
+                            ${thumbHtml}
+                        </div>
+                    </div>
+                    
+                    <div class="product-info">
+                        <h1>${data.name}</h1>
+                        <p class="lead">${this.getText(data.description)}</p>
+                        <ul class="specs-list">
+                            ${specsHtml}
+                        </ul>
+                        <div class="download-links">
+                            ${dlHtml}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
+    },
+
+    setMainImg(src, elem) {
+        document.getElementById('main-product-img').src = src;
+        document.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
+        if(elem) elem.classList.add('active');
+    },
+
+    async renderGallery() {
+        const data = await this.fetchYaml('data/gallery.yaml');
+        if(!data) return;
+
+        let gridHtml = '';
+        data.images.forEach((img, idx) => {
+            gridHtml += `
+            <div class="gallery-item" onclick="app.openLightbox('${img}', ${idx})">
+                <img src="${img}" class="gallery-img" loading="lazy">
+            </div>`;
+        });
+
+        const html = `
+            <div class="container section">
+                <h2 class="section-title">${this.getText(data.title)}</h2>
+                <p class="section-subtitle">${this.getText(data.description)}</p>
+                
+                <div class="gallery-mosaic">
+                    ${gridHtml}
+                </div>
+            </div>
+
+            <!-- Lightbox Modal -->
+            <div id="lightbox" class="lightbox" onclick="if(event.target===this) app.closeLightbox()">
+                <button class="lightbox-close" onclick="app.closeLightbox()">×</button>
+                <button class="lightbox-prev" onclick="app.prevLightbox(event)">&#10094;</button>
+                <img id="lightbox-img" class="lightbox-img" src="">
+                <button class="lightbox-next" onclick="app.nextLightbox(event)">&#10095;</button>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
+        this.galleryImages = data.images;
+        this.currentBoxIdx = 0;
+    },
+
+    openLightbox(src, idx) {
+        this.currentBoxIdx = idx;
+        const box = document.getElementById('lightbox');
+        document.getElementById('lightbox-img').src = src;
+        box.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    },
+
+    closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+    },
+
+    prevLightbox(e) {
+        e.stopPropagation();
+        this.currentBoxIdx = (this.currentBoxIdx - 1 + this.galleryImages.length) % this.galleryImages.length;
+        document.getElementById('lightbox-img').src = this.galleryImages[this.currentBoxIdx];
+    },
+
+    nextLightbox(e) {
+        e.stopPropagation();
+        this.currentBoxIdx = (this.currentBoxIdx + 1) % this.galleryImages.length;
+        document.getElementById('lightbox-img').src = this.galleryImages[this.currentBoxIdx];
+    },
+
+    async renderContact() {
+        const data = await this.fetchYaml('data/contact.yaml');
+        if(!data) return;
+
+        const html = `
+            <div class="container section">
+                <h2 class="section-title">${this.getText(data.title)}</h2>
+                <p class="section-subtitle">${this.getText(data.description)}</p>
+                
+                <div class="contact-layout">
+                    <div class="contact-info-panel">
+                        <h2>${this.currentLang === 'ES' ? 'Información' : 'Information'}</h2>
+                        <div class="contact-item">
+                            <i class="contact-icon">📞</i>
+                            <span>${data.info.phone}</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="contact-icon">✉️</i>
+                            <span>${data.info.email}</span>
+                        </div>
+                        <div class="contact-social">
+                            <a href="${data.social.instagram}" target="_blank" class="social-icon" aria-label="Instagram">IG</a>
+                            <a href="${data.social.youtube}" target="_blank" class="social-icon" aria-label="YouTube">YT</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form-panel">
+                        <form onsubmit="event.preventDefault(); alert('Mensaje enviado (simulación)');">
+                            <div class="form-group">
+                                <label class="form-label">${this.getText(data.form_labels.name)}</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">${this.getText(data.form_labels.email)}</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">${this.getText(data.form_labels.message)}</label>
+                                <textarea class="form-control" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%">${this.getText(data.form_labels.submit)}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
     }
-    
-    // Setup simple carousel logic
-    setTimeout(() => {
-      const track = document.getElementById('home-carousel-track');
-      if (!track) return;
-      const slides = track.querySelectorAll('.carousel-slide');
-      let index = 0;
-      
-      const updateCarousel = () => {
-        track.style.transform = `translateX(-${index * 100}%)`;
-      };
-      
-      document.querySelector('.carousel-next').addEventListener('click', () => {
-        index = (index + 1) % slides.length;
-        updateCarousel();
-      });
-      document.querySelector('.carousel-prev').addEventListener('click', () => {
-        index = (index - 1 + slides.length) % slides.length;
-        updateCarousel();
-      });
-      
-      // Auto-slide every 5 seconds
-      setInterval(() => {
-        index = (index + 1) % slides.length;
-        updateCarousel();
-      }, 5000);
-    }, 100);
-  },
-
-  async renderProductsList() {
-    let listHtml = `<h2 class="section-title">${this.lang === 'es' ? 'Nuestra Maquinaria' : 'Our Machinery'}</h2><div class="products-grid">`;
-    
-    for (const prodId of this.config.products) {
-      const page = await this.fetchMarkdown(`content/products/${prodId}.md`);
-      const title = page.meta[`title_${this.lang}`] || page.meta.title || prodId;
-      const image = page.meta.images && page.meta.images.length > 0 ? page.meta.images[0] : '';
-      
-      // Get a short snippet of the description
-      const snippetNode = document.createElement('div');
-      snippetNode.innerHTML = page.html;
-      const snippet = snippetNode.innerText.substring(0, 150) + '...';
-
-      listHtml += `
-        <div class="product-card" style="cursor: pointer;" onclick="window.location.hash='#product/${prodId}'">
-          <img src="${image}" alt="${title}" class="product-image">
-          <div class="product-info">
-            <h3>${title}</h3>
-            <p>${snippet}</p>
-            <br>
-            <span class="btn btn-outline" style="text-align:center">${this.lang === 'es' ? 'Ver Detalles' : 'View Details'}</span>
-          </div>
-        </div>
-      `;
-    }
-    
-    listHtml += '</div>';
-    this.contentEl.innerHTML = `<div class="page-container">${listHtml}</div>`;
-  },
-
-  async renderProductDetail(prodId) {
-    const page = await this.fetchMarkdown(`content/products/${prodId}.md`);
-    const title = page.meta[`title_${this.lang}`] || page.meta.title || prodId;
-    const images = page.meta.images || [];
-    
-    let galleryHtml = '';
-    if (images.length > 0) {
-      let thumbsHtml = images.map((img, i) => `
-        <img src="${img}" class="thumbnail ${i===0?'active':''}" onclick="document.getElementById('main-prod-img').src='${img}'; document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('active')); this.classList.add('active');">
-      `).join('');
-      
-      galleryHtml = `
-        <div class="product-gallery">
-          <img src="${images[0]}" id="main-prod-img" class="main-image">
-          <div class="thumbnail-grid">${thumbsHtml}</div>
-        </div>
-      `;
-    }
-
-    let downloadsHtml = '';
-    const downloads = page.meta[`downloads_${this.lang}`] || page.meta.downloads;
-    if (downloads && downloads.length > 0) {
-      downloadsHtml = `
-        <div class="downloads">
-          <h3><i class="fas fa-download"></i> ${this.lang === 'es' ? 'Descargas' : 'Downloads'}</h3>
-          ${downloads.map(d => `
-            <a href="${d.url}" class="download-link" target="_blank">
-              <i class="fas fa-file-pdf" style="font-size: 1.5rem; color: #e74c3c;"></i>
-              <span>${d.name}</span>
-            </a>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    this.contentEl.innerHTML = `
-      <div class="page-container product-detail">
-        ${galleryHtml}
-        <div class="product-content">
-          <h1>${title}</h1>
-          <div class="markdown-body">
-            ${page.html}
-          </div>
-          ${downloadsHtml}
-        </div>
-      </div>
-    `;
-  },
-
-  async renderGallery() {
-    // Collect all images from product markdown files
-    let allImages = [];
-    for (const prodId of this.config.products) {
-      try {
-        const page = await this.fetchMarkdown(`content/products/${prodId}.md`);
-        const imgs = page.meta.images || [];
-        allImages = allImages.concat(imgs);
-      } catch(e) { /* skip */ }
-    }
-    // Add standalone assets
-    const standalone = this.config.gallery_images || [];
-    allImages = allImages.concat(standalone);
-    // Remove duplicates
-    allImages = [...new Set(allImages)];
-
-    const title = this.lang === 'es' ? 'Galería' : 'Gallery';
-    const noPhotos = this.lang === 'es' ? 'No hay fotos en la galería todavía.' : 'No photos in the gallery yet.';
-
-    const itemsHtml = allImages.length > 0
-      ? allImages.map((src, i) => `
-          <div class="gallery-item" onclick="App.openLightbox('${src}')">
-            <img src="${src}" alt="Gallery photo ${i+1}" loading="lazy">
-            <div class="overlay"><i class="fas fa-expand"></i></div>
-          </div>`).join('')
-      : `<p style="color: var(--text-secondary); margin-top: 2rem;">${noPhotos}</p>`;
-
-    this.contentEl.innerHTML = `
-      <div class="page-container">
-        <h2 class="section-title">${title}</h2>
-        <div class="gallery-grid">${itemsHtml}</div>
-      </div>
-    `;
-  },
-
-  openLightbox(src) {
-    const lb = document.createElement('div');
-    lb.className = 'lightbox';
-    lb.innerHTML = `
-      <button class="lightbox-close" onclick="this.parentElement.remove()" aria-label="Close">&times;</button>
-      <img src="${src}" alt="Gallery photo">
-    `;
-    lb.addEventListener('click', (e) => {
-      if (e.target === lb) lb.remove();
-    });
-    document.body.appendChild(lb);
-  },
-
-  async renderContact() {
-    const page = await this.fetchMarkdown('content/contact.md');
-    
-    this.contentEl.innerHTML = `
-      <div class="page-container">
-        <h2 class="section-title">${this.lang === 'es' ? 'Contacta con nosotros' : 'Contact Us'}</h2>
-        <div class="contact-wrapper">
-          <div class="markdown-body contact-info-card">
-            ${page.html}
-          </div>
-          <div>
-            <!-- Note: Formspree integration. Replace 'YOUR_FORM_ID' with the real ID from Formspree -->
-            <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-              <div class="form-group">
-                <label>${this.lang === 'es' ? 'Nombre' : 'Name'}</label>
-                <input type="text" name="name" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label>${this.lang === 'es' ? 'Correo Electrónico' : 'Email'}</label>
-                <input type="email" name="email" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label>${this.lang === 'es' ? 'Mensaje' : 'Message'}</label>
-                <textarea name="message" class="form-control" required></textarea>
-              </div>
-              <button type="submit" class="btn">${this.lang === 'es' ? 'Enviar Mensaje' : 'Send Message'}</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    `;
-  }
 };
 
-document.addEventListener('DOMContentLoaded', () => App.init());
+window.onload = () => app.init();

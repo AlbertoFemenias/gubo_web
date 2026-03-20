@@ -1,0 +1,24 @@
+name: "Modelo 100Pro"
+
+description:
+  ES: "Nuestra máquina más avanzada. Ancho de corte superior y rendimiento profesional inigualable."
+  EN: "Our most advanced machine. Superior cutting width and unmatched professional performance."
+
+images:
+  - "assets/images/machine_in_the_field.webp"
+  - "assets/images/machine_front.webp"
+  - "assets/images/machine_back.jpg"
+
+specs:
+  - ES: "Motores bicilíndrico, Loncin, 764cc respectivamente (25cv)."
+    EN: "Twin-cylinder engines, Loncin, 764cc respectively (25hp)."
+  - ES: "Sistema de tracción híbrido para máxima comodidad y flexibilidad."
+    EN: "Hybrid traction system for maximum comfort and flexibility."
+  - ES: "Ancho de corte de 1 metro."
+    EN: "1 meter cutting width."
+
+downloads:
+  - label: 
+      ES: "Descargar Ficha Técnica PDF"
+      EN: "Download PDF Spec Sheet"
+    url: "#"

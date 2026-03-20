@@ -1,0 +1,24 @@
+name: "Modelo 80"
+
+description:
+  ES: "Máquina desbrozadora ideal para terrenos medianos con un ancho de corte de 80cm y tracción híbrida."
+  EN: "Ideal brush cutter machine for medium terrains with an 80cm cutting width and hybrid traction."
+
+images:
+  - "assets/images/machine_front.webp"
+  - "assets/images/machine_in_the_field.webp"
+  - "assets/images/machine_with_remote_control.webp"
+
+specs:
+  - ES: "Motores monocilíndrico Loncin, 420cc (14 cv)."
+    EN: "Single cylinder Loncin engines, 420cc (14 hp)."
+  - ES: "Sistema de tracción híbrido para máxima comodidad y flexibilidad."
+    EN: "Hybrid traction system for maximum comfort and flexibility."
+  - ES: "Ancho de corte de 80cm."
+    EN: "80cm cutting width."
+
+downloads:
+  - label: 
+      ES: "Descargar Ficha Técnica PDF"
+      EN: "Download PDF Spec Sheet"
+    url: "#"

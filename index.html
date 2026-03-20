@@ -3,76 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gubo Maquinaria Forestal</title>
+    <title>GUBO Maquinaria Forestal</title>
     
-    <!-- Fonts -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-
-    <!-- Dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar glass">
+    <header class="navbar">
         <div class="nav-container">
-            <a href="#home" class="brand">
-                <img src="initial_resources/logos/Logo GUBO transparente.png" alt="Gubo Logo" class="logo">
+            <a href="#home" class="logo-link">
+                <!-- Fallback img while JS loads data, but we can hardcode the logo path since it's static -->
+                <img src="assets/logos/Logo GUBO transparente.png" alt="GUBO Logo" class="nav-logo">
             </a>
             
-            <div class="nav-links">
-                <a href="#home" data-i18n="nav_home">Inicio</a>
-                <div class="dropdown">
-                    <a href="#products" data-i18n="nav_products">Maquinaria</a>
-                    <div class="dropdown-menu" id="products-dropdown">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
-                <a href="#gallery" data-i18n="nav_gallery">Galería</a>
-                <a href="#contact" data-i18n="nav_contact">Contacto</a>
-            </div>
-
-            <div class="lang-switcher">
-                <button id="lang-es" class="lang-btn active"><i class="fi fi-es"></i> ES</button>
-                <button id="lang-en" class="lang-btn"><i class="fi fi-gb"></i> EN</button>
-            </div>
-
-            <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
             </button>
+            
+            <nav class="nav-links" id="nav-links">
+                <!-- Injected via JS -->
+            </nav>
+            
+            <div class="lang-selector">
+                <button id="lang-es" class="lang-btn active" onclick="app.setLanguage('ES')"><span class="flag">🇪🇸</span></button>
+                <button id="lang-en" class="lang-btn" onclick="app.setLanguage('EN')"><span class="flag">🇬🇧</span></button>
+            </div>
         </div>
-    </nav>
+    </header>
 
     <main id="app-content">
-        <div class="loader">
-            <div class="spinner"></div>
-        </div>
+        <!-- Content gets dynamically injected here based on the route -->
+        <div class="loader">Cargando...</div>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo"></div>
+    <footer class="footer">
+        <div class="footer-container">
             <div class="footer-info">
-                <p>Maquinaria profesional para jardín y zona verde</p>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/car/" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="mailto:contacto@gubo.es"><i class="fas fa-envelope"></i></a>
-                </div>
+                <img src="assets/logos/Logo GUBO transparente.png" alt="GUBO Logo" class="footer-logo">
+                <p id="footer-slogan" class="footer-slogan">El poder del desbroce en tus manos</p>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; <span id="year"></span> Gubo Maquinaria. All rights reserved.</p>
+            <div class="footer-links">
+                <!-- Dynamically injected navigation links or hardcoded -->
+                <p id="footer-copyright">&copy; <span id="year"></span> GUBO. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- JS -->
-    <script async src="//www.instagram.com/embed.js"></script>
+    <!-- Libraries -->
+    <script src="assets/js/js-yaml.min.js"></script>
+    
+    <!-- App Logic -->
     <script src="js/app.js"></script>
 </body>
 </html>
