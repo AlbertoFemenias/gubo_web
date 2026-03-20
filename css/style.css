@@ -102,6 +102,7 @@ img {
     text-align: center;
     margin-bottom: 1rem;
     background: linear-gradient(to right, var(--text-pure), var(--text-muted));
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -191,7 +192,7 @@ img {
 }
 
 .nav-logo {
-    height: 40px;
+    height: 70px; /* Increased size significantly for better visibility */
     transition: var(--transition-smooth);
     filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
 }
@@ -255,10 +256,17 @@ img {
     transition: var(--transition-fast);
 }
 
+.lang-btn:not(.active) {
+    opacity: 0.4;
+    filter: grayscale(100%);
+}
+
 .lang-btn.active {
-    background: var(--surface-1);
+    background: rgba(255, 255, 255, 0.15); /* Significantly brighter background to show active state clearly */
     color: var(--text-pure);
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    opacity: 1;
+    filter: grayscale(0%);
 }
 
 /* Mobile Menu */
@@ -382,6 +390,8 @@ img {
     border-radius: var(--radius-lg);
     padding: 2rem;
     transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
 }
 
 .embed-container:hover {
@@ -390,7 +400,7 @@ img {
 }
 
 .embed-container h3 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem; /* Increased margin to give video breathing room */
     font-size: 1.5rem;
     color: var(--text-pure);
     position: relative;
@@ -413,6 +423,8 @@ img {
     border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: inset 0 0 0 1px var(--surface-border);
+    margin: auto 0; /* Centers the video vertically if the container is stretched by the grid */
+    width: 100%;
 }
 
 .video-wrapper iframe {
@@ -427,6 +439,7 @@ img {
     border-radius: var(--radius-md);
     overflow: hidden;
     background: #000;
+    margin: auto 0;
 }
 
 .insta-wrapper iframe {
@@ -451,7 +464,6 @@ img {
     transition: var(--transition-smooth);
     display: flex;
     flex-direction: column;
-    group: card;
 }
 
 .product-card:hover {
@@ -562,6 +574,7 @@ img {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
     background: var(--primary-gradient);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
