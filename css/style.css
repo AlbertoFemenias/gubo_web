@@ -90,11 +90,13 @@ img {
 .container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .section {
-    padding: 3rem 0;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 
 .section-title {
@@ -189,7 +191,9 @@ img {
 }
 
 .nav-logo {
-    height: 70px; /* Increased size significantly for better visibility */
+    height: 130px; /* Increased size without expanding navbar */
+    margin-top: -30px;
+    margin-bottom: -30px;
     transition: var(--transition-smooth);
     filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
 }
@@ -644,7 +648,7 @@ img {
     z-index: 1;
 }
 
-.gallery-item:nth-child(3n) {
+.gallery-item--featured {
     grid-column: span 2;
     grid-row: span 2;
 }

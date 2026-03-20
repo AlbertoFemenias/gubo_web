@@ -231,10 +231,21 @@ const app = {
         const data = await this.fetchYaml('data/gallery.yaml');
         if(!data) return;
 
+        // Distribute featured (2x2) items with a scattered offset pattern
+        // so large images don't always cluster on the same side of the grid.
+        // Pattern: featured at positions 2, 7, 12, 17... (every 5, starting offset 2)
+        const featuredSet = new Set();
+        let pos = 2, step = 5;
+        while (pos < data.images.length) {
+            featuredSet.add(pos);
+            pos += step;
+        }
+
         let gridHtml = '';
         data.images.forEach((img, idx) => {
+            const featured = featuredSet.has(idx) ? ' gallery-item--featured' : '';
             gridHtml += `
-            <div class="gallery-item" onclick="app.openLightbox('${img}', ${idx})">
+            <div class="gallery-item${featured}" onclick="app.openLightbox('${img}', ${idx})">
                 <img src="${img}" class="gallery-img" loading="lazy">
             </div>`;
         });
