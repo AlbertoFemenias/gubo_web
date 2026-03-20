@@ -54,6 +54,14 @@
         </div>
     </footer>
 
+    <!-- Lightbox Modal (Outside app-content to avoid CSS transform relative positioning issues) -->
+    <div id="lightbox" class="lightbox" onclick="if(event.target===this) app.closeLightbox()">
+        <button class="lightbox-close" onclick="app.closeLightbox()">×</button>
+        <button class="lightbox-prev" onclick="app.prevLightbox(event)">&#10094;</button>
+        <img id="lightbox-img" class="lightbox-img" src="">
+        <button class="lightbox-next" onclick="app.nextLightbox(event)">&#10095;</button>
+    </div>
+
     <!-- Libraries -->
     <script src="assets/js/js-yaml.min.js"></script>
     

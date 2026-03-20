@@ -699,7 +699,7 @@ img {
     to { transform: scale(1); opacity: 1; }
 }
 
-.lightbox-controls button {
+.lightbox button {
     position: absolute;
     background: var(--surface-2);
     backdrop-filter: blur(8px);
@@ -715,15 +715,15 @@ img {
     transition: var(--transition-smooth);
 }
 
-.lightbox-controls button:hover {
+.lightbox button:hover {
     background: var(--primary-solid);
     color: #000;
     transform: scale(1.1);
 }
 
 .lightbox-close { top: 2rem; right: 2rem; }
-.lightbox-prev { left: 2rem; top: 50%; transform: translateY(-50%); }
-.lightbox-next { right: 2rem; top: 50%; transform: translateY(-50%); }
+.lightbox-prev { left: 2rem; top: 50%; }
+.lightbox-next { right: 2rem; top: 50%; }
 
 
 /* Contact */
@@ -904,7 +904,18 @@ textarea.form-control {
     
     .media-embeds { grid-template-columns: 1fr; }
     .products-grid { grid-template-columns: 1fr; }
+    
+    .gallery-mosaic {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        grid-auto-rows: 150px;
+    }
     .gallery-item:nth-child(3n) { grid-column: span 1; grid-row: span 1; }
+
+    .lightbox button { width: 44px; height: 44px; font-size: 1.2rem; }
+    .lightbox-prev { left: 0.5rem; }
+    .lightbox-next { right: 0.5rem; }
+    .lightbox-close { top: 1rem; right: 1rem; }
     
     .footer-container { flex-direction: column; text-align: center; gap: 2rem; }
 }

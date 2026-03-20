@@ -248,14 +248,6 @@ const app = {
                     ${gridHtml}
                 </div>
             </div>
-
-            <!-- Lightbox Modal -->
-            <div id="lightbox" class="lightbox" onclick="if(event.target===this) app.closeLightbox()">
-                <button class="lightbox-close" onclick="app.closeLightbox()">×</button>
-                <button class="lightbox-prev" onclick="app.prevLightbox(event)">&#10094;</button>
-                <img id="lightbox-img" class="lightbox-img" src="">
-                <button class="lightbox-next" onclick="app.nextLightbox(event)">&#10095;</button>
-            </div>
         `;
         document.getElementById('app-content').innerHTML = html;
         this.galleryImages = data.images;
