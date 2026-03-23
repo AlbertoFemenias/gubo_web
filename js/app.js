@@ -356,18 +356,26 @@ const app = {
                     </div>
                     
                     <div class="contact-form-panel">
-                        <form onsubmit="event.preventDefault(); alert('Mensaje enviado (simulación)');">
+                        <form onsubmit="
+                            event.preventDefault();
+                            var name    = document.getElementById('cf-name').value.trim();
+                            var email   = document.getElementById('cf-email').value.trim();
+                            var message = document.getElementById('cf-message').value.trim();
+                            var subject = encodeURIComponent('Contacto web \u2013 ' + name);
+                            var body    = encodeURIComponent('Nombre: ' + name + '\nEmail: ' + email + '\n\n' + message);
+                            window.location.href = 'mailto:${data.info.email}?subject=' + subject + '&body=' + body;
+                        ">
                             <div class="form-group">
-                                <label class="form-label">${this.getText(data.form_labels.name)}</label>
-                                <input type="text" class="form-control" required>
+                                <label class="form-label" for="cf-name">${this.getText(data.form_labels.name)}</label>
+                                <input id="cf-name" type="text" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">${this.getText(data.form_labels.email)}</label>
-                                <input type="email" class="form-control" required>
+                                <label class="form-label" for="cf-email">${this.getText(data.form_labels.email)}</label>
+                                <input id="cf-email" type="email" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">${this.getText(data.form_labels.message)}</label>
-                                <textarea class="form-control" required></textarea>
+                                <label class="form-label" for="cf-message">${this.getText(data.form_labels.message)}</label>
+                                <textarea id="cf-message" class="form-control" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary" style="width: 100%">${this.getText(data.form_labels.submit)}</button>
                         </form>
