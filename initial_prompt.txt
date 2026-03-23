@@ -1,0 +1,36 @@
+Hola
+
+Hola, estoy creando una web para mi nueva empresa “GUBO”. Esta empresa se dedica a vender maquinas de desbroce forestal a distribuidores locales que son los que venden la máquina al usuario final y le dan mantenimiento. Aqui una pequeña descripcion:  “Maquinaria profesional para jardín, zona verde y mantenimiento general. Compactas y potentes, concebidas para el mantenimiento de zonas verdes donde las máquinas tradicionales no son convenientes.”  Nuestro logo será:
+ES: El poder del desbroce en tus manos EN: The power of the forestry mower at your fingertips
+
+Para mi web me gustaría que crearas una web con html js y css pero que la web se maneje a través de ficheros YAML. Yo soy informático pero mi socio no lo es y ambos debemos de ser capaces de alterar facilmente la web sin tener que tocar el código.No queremos frameworks tampoco porque queremos que sea facil de mantener en un futuro. La idea es hostear la web en github pages. La web es simplemente una carta de presentación, el usuario no puede hacer login ni tiene sesión, simplemente puedo consultar información para informarse y contactarnos.
+
+Me gustaría organizar la web en cuatro secciones, una de portada, en la que pondremos una atractiva entrada a la marca, incrustando si puede ser el instagram oficial y un video de youtube: instagram https://www.instagram.com/gubomaquinaria/
+youtube video https://www.youtube.com/watch?v=rlP2mI5YKQ0
+ Es importante que la portada se adapte bien a dispositivos moviles y desktop y que los elementos de instagram y youtube se vean bien proporcionados 
+Como para todos los apartados de la web, sebe haber un YAML para esta portada que contenga todo el texto y nos permita modificar la portada fácilmente
+
+Despues, en la segunda sección de de productos / maquinaria, me gustaria crear subpáginas, una por cada producto. Cada producto tendrá un YAML y este generará una pagina de producto. Para cada producto pondremos unas fotos, el nombre del producto, descripción…  todo en el yaml. También podremos subir ficheros que el usuario pueda descargar como la ficha técnica u otros documentos, pon un ejemplo por ahora. Actualmente tenemos 3 productos que ahora mismo te describiré. Para las fotos, puedes usar las mismas para los 3 productos por el momento para ir empezando con la web porque ahora mismo no tengo más fotos. Las fotos de producto están en la ruta /Users/alberto/Dev/gubo_web_2/initial_resources/photos
+
+Estos son nuestros 3 productos:
+Modelo 80:
+✔️ Motores monocilíndrico Loncin, 420cc(14 cv).
+✔️Sistema de tracción híbrido para máxima comodidad y flexibilidad.
+✔️ Ancho de corte de 80cm.  Modelo 100:
+✔️ Motores bicilíndrico, Loncin, 764cc respectivamente (25cv).
+✔️Sistema de tracción híbrido para máxima comodidad y flexibilidad.
+✔️ Ancho de corte de 80cm.  Modelo 100Pro:
+✔️ Motores bicilíndrico, Loncin, 764cc respectivamente (25cv). ✔️Sistema de tracción híbrido para máxima comodidad y flexibilidad.
+✔️ Ancho de corte de 1 metro.
+
+Como acabo de decir, cada página de producto debe tener su YAML indicando las fotos, los ficheros, la descripción, la descripción tecnica y el titulo.  En el tercer apartado, quiero una página de galeria, que cuando entres veas un mosaico de fotos y cuando cliques en una se haga grande y puedas pasar a la siguiente, anterior o cerrar. Pon las imagenes que tenemos de producto por ahora, repitelas varias veces para que la galería esté llena. El YAML de la galería deberá permitir elegir que fotos se muestran en la galería y cuales no en función de los paths que le pongas.  Por último quiero una sección de contacto, la típica que diga el telefono de la empresa, insta, youtube, el correo electronico y un formulario para que nos escriban. email: contacto@gubo.es
+Tlf y whatsapp: +34 602 05 76 91  Es importante que esta sección / página sea responsive como las otras y que sea bonita (que tenga iconos de whatsapp, email, youtube, instagram…)
+
+ La web debe estar por defecto en español pero tambien con posibilidad de ingles a traves de un selector en la barra de navegación (con banderitas) por lo que todo el texto debe estar en dos idiomas dentro del YAML (no quiero dos YAML, uno con cada idioma si no un solo YAML con keys claras que al final tenga una clave para ES y otra para EN, así en el futuro será facil añadir un idioma más) y debe ser muy facil poder añadir un idioma más.
+
+No sé si necesitarás añadir un YAML extra de configuraciones de la página como subpaginas, ajustes etc.
+
+En la carpeta initial_resources/logos está -el logo de la empresa. Es importante que la barra de navegacion tenga el logo con un tamaño correcto, ni muy grande ni muy pequeño en relación a los otros elementos
+
+Es muy importante que la web tenga un aspecto moderno y profesional, como si hubieramos pagado bastante dinero a un diseñador para hacerla. Para la portada puedes usar la imagen initial_resources/backgrounds/home_background.png  Como te he mencionado varias veces, usa las imágenes de initial_resources pero no se te ocurra referenciarlas, haz una copia de las que uses y ponlas en una carpeta assets o algo así pues más tarde borraré la carpeta initial_resources. Es muy importante que los YAMLs funcionen bien para modificar la web y que están en una estructura de carpetas similar a la estructura de la web para poder modificar o extender la web facilmente en un futuro.
+

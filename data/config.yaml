@@ -13,11 +13,16 @@ nav:
   contact:
     ES: "Contacto"
     EN: "Contact"
-
+ about:
+    ES: "Nosotros"
+    EN: "About Us"
 buttons:
   read_more:
     ES: "Ver maquinaria"
     EN: "See machines"
+  see_product:
+    ES: "Ver producto"
+    EN: "See product"
   download_spec:
     ES: "Descargar Ficha Técnica"
     EN: "Download Spec Sheet"

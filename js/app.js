@@ -65,6 +65,7 @@ const app = {
             <a href="#home">${this.getText(items.home)}</a>
             <a href="#products">${this.getText(items.products)}</a>
             <a href="#gallery">${this.getText(items.gallery)}</a>
+            <a href="#about">${this.getText(items.about)}</a>
             <a href="#contact">${this.getText(items.contact)}</a>
         `;
         
@@ -98,6 +99,7 @@ const app = {
         window.scrollTo(0, 0);
 
         if (route === 'home') await this.renderHome();
+        else if (route === 'about') await this.renderAbout();
         else if (route === 'products') {
             if (parts[1]) await this.renderProduct(parts[1]);
             else await this.renderProducts();
@@ -142,6 +144,43 @@ const app = {
         document.getElementById('app-content').innerHTML = html;
     },
 
+    async renderAbout() {
+        const data = await this.fetchYaml('data/about.yaml');
+        if (!data) return;
+
+        const sectionsHtml = (data.sections || []).map(s => `
+            <div class="about-card glass-panel">
+                <div class="about-card-icon">${s.icon}</div>
+                <h3>${this.getText(s.heading)}</h3>
+                <p>${this.getText(s.text)}</p>
+            </div>
+        `).join('');
+
+        const html = `
+            <div class="about-hero" style="background-image: url('${data.hero_image}')">
+                <div class="about-hero-overlay"></div>
+                <div class="about-hero-content container">
+                    <p class="about-eyebrow">GUBO Maquinaria</p>
+                    <h1>${this.getText(data.title)}</h1>
+                    <p class="about-subtitle">${this.getText(data.subtitle)}</p>
+                </div>
+            </div>
+
+            <div class="container section">
+                <div class="about-intro-layout">
+                    <div class="about-intro-text">
+                        <p>${this.getText(data.intro)}</p>
+                    </div>
+                </div>
+
+                <div class="about-cards">
+                    ${sectionsHtml}
+                </div>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
+    },
+
     async renderProducts() {
         const data = await this.fetchYaml('data/products.yaml');
         if(!data) return;
@@ -157,7 +196,7 @@ const app = {
                     <div class="product-content">
                         <h3 class="product-title">${pData.name}</h3>
                         <p class="product-desc">${this.getText(pData.description)}</p>
-                        <span class="btn btn-primary" style="align-self: flex-start; margin-top: 1rem;">${this.getText(this.config.buttons.read_more)}</span>
+                        <span class="btn btn-primary" style="align-self: flex-start; margin-top: 1rem;">${this.getText(this.config.buttons.see_product)}</span>
                     </div>
                  </a>
                  `;
