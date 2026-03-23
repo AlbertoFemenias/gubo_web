@@ -329,6 +329,18 @@ const app = {
         document.getElementById('lightbox-img').src = this.galleryImages[this.currentBoxIdx];
     },
 
+    sendContactForm(event) {
+        event.preventDefault();
+        var form    = event.target;
+        var to      = form.dataset.email;
+        var name    = document.getElementById('cf-name').value.trim();
+        var email   = document.getElementById('cf-email').value.trim();
+        var message = document.getElementById('cf-message').value.trim();
+        var subject = encodeURIComponent('Contacto web - ' + name);
+        var body    = encodeURIComponent('Nombre: ' + name + '\nEmail: ' + email + '\n\n' + message);
+        window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+    },
+
     async renderContact() {
         const data = await this.fetchYaml('data/contact.yaml');
         if(!data) return;
@@ -356,15 +368,7 @@ const app = {
                     </div>
                     
                     <div class="contact-form-panel">
-                        <form onsubmit="
-                            event.preventDefault();
-                            var name    = document.getElementById('cf-name').value.trim();
-                            var email   = document.getElementById('cf-email').value.trim();
-                            var message = document.getElementById('cf-message').value.trim();
-                            var subject = encodeURIComponent('Contacto web \u2013 ' + name);
-                            var body    = encodeURIComponent('Nombre: ' + name + '\nEmail: ' + email + '\n\n' + message);
-                            window.location.href = 'mailto:${data.info.email}?subject=' + subject + '&body=' + body;
-                        ">
+                        <form onsubmit="app.sendContactForm(event)" data-email="${data.info.email}">
                             <div class="form-group">
                                 <label class="form-label" for="cf-name">${this.getText(data.form_labels.name)}</label>
                                 <input id="cf-name" type="text" class="form-control" required>
