@@ -1,0 +1,40 @@
+title:
+  ES: "Recambios"
+  EN: "Spare Parts"
+description:
+  ES: "Encuentra las piezas de repuesto para tu maquinaria GUBO."
+  EN: "Find spare parts for your GUBO machinery."
+
+items:
+  - id: "sp-ecu"
+    name:
+      ES: "Unidad de Control Electrónico (ECU)"
+      EN: "Electronic Control Unit (ECU)"
+    ref: "REF-ECU-001"
+    description:
+      ES: "Módulo central de control para los sistemas electrónicos y de motor."
+      EN: "Central control module for electronic and engine systems."
+    image: "assets/images/spareparts/ecu.png"
+    compatibility: ["model-100", "model-100pro"]
+
+  - id: "sp-oil-filter"
+    name:
+      ES: "Filtro de Aceite"
+      EN: "Oil Filter"
+    ref: "REF-OIL-089"
+    description:
+      ES: "Filtro de aceite de alto rendimiento para mantenimiento regular."
+      EN: "High-performance oil filter for regular maintenance."
+    image: "assets/images/spareparts/oil_filter.png"
+    compatibility: ["model-80", "model-100", "model-100pro"]
+
+  - id: "sp-rc-control"
+    name:
+      ES: "Mando a Distancia (RC)"
+      EN: "Remote Control (RC)"
+    ref: "REF-RC-223"
+    description:
+      ES: "Control remoto ergonómico de largo alcance con pantalla integrada."
+      EN: "Ergonomic long-range remote control with integrated display."
+    image: "assets/images/spareparts/rc_control.png"
+    compatibility: ["model-100", "model-100pro"]

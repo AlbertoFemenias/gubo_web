@@ -16,6 +16,9 @@ nav:
   about:
     ES: "Nosotros"
     EN: "About Us"
+  spareparts:
+    ES: "Recambios"
+    EN: "Spare Parts"
 buttons:
   read_more:
     ES: "Ver maquinaria"

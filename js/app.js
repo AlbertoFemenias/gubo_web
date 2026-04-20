@@ -64,6 +64,7 @@ const app = {
         nav.innerHTML = `
             <a href="#home">${this.getText(items.home)}</a>
             <a href="#products">${this.getText(items.products)}</a>
+            <a href="#spareparts">${this.getText(items.spareparts)}</a>
             <a href="#gallery">${this.getText(items.gallery)}</a>
             <a href="#about">${this.getText(items.about)}</a>
             <a href="#contact">${this.getText(items.contact)}</a>
@@ -104,6 +105,7 @@ const app = {
             if (parts[1]) await this.renderProduct(parts[1]);
             else await this.renderProducts();
         }
+        else if (route === 'spareparts') await this.renderSpareParts();
         else if (route === 'gallery') await this.renderGallery();
         else if (route === 'contact') await this.renderContact();
         else await this.renderHome();
@@ -388,6 +390,88 @@ const app = {
             </div>
         `;
         document.getElementById('app-content').innerHTML = html;
+    },
+
+    async renderSpareParts() {
+        const data = await this.fetchYaml('data/spareparts.yaml');
+        const prodData = await this.fetchYaml('data/products.yaml');
+        if(!data || !prodData) return;
+
+        // Create filter buttons
+        let compats = new Set();
+        data.items.forEach(item => {
+            if(item.compatibility) item.compatibility.forEach(c => compats.add(c));
+        });
+
+        let filterBtns = `<button class="filter-btn active" onclick="app.filterSpareParts('all', this)">${this.currentLang === 'ES' ? 'Todos' : 'All'}</button>`;
+        compats.forEach(c => {
+            let pName = c.replace('model-', 'Model ').toUpperCase();
+            filterBtns += `<button class="filter-btn" data-compat="${c}" onclick="app.filterSpareParts('${c}', this)">${pName}</button>`;
+        });
+
+        let itemsHtml = data.items.map(item => `
+            <div class="product-card spare-part-card" data-name="${item.name.ES.toLowerCase()} ${item.name.EN.toLowerCase()}" data-ref="${item.ref.toLowerCase()}" data-compat="${item.compatibility.join(',')}">
+                <div class="product-image-wrapper">
+                    <img class="product-image" src="${item.image}" alt="${this.getText(item.name)}">
+                </div>
+                <div class="product-content">
+                    <span class="spare-ref">${item.ref}</span>
+                    <h3 class="product-title" style="font-size: 1.4rem; margin-top: 0.5rem;">${this.getText(item.name)}</h3>
+                    <p class="product-desc" style="margin-bottom: 1rem;">${this.getText(item.description)}</p>
+                    <div class="spare-compat">
+                        ${item.compatibility.map(c => `<span class="compat-badge">${c.replace('model-', 'M')}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        const html = `
+            <div class="container section">
+                <h2 class="section-title">${this.getText(data.title)}</h2>
+                <p class="section-subtitle">${this.getText(data.description)}</p>
+                
+                <div class="filter-bar">
+                    <div class="search-box">
+                        <input type="text" id="spare-search" class="form-control" placeholder="${this.currentLang === 'ES' ? 'Buscar por nombre o ref...' : 'Search by name or ref...'}" onkeyup="app.filterSpareParts()">
+                    </div>
+                    <div class="filter-buttons">
+                        ${filterBtns}
+                    </div>
+                </div>
+
+                <div class="products-grid" id="spare-grid">
+                    ${itemsHtml}
+                </div>
+            </div>
+        `;
+        document.getElementById('app-content').innerHTML = html;
+        this.currentSpareCompat = 'all';
+    },
+
+    filterSpareParts(compat = null, btnElem = null) {
+        if(compat) {
+            this.currentSpareCompat = compat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btnElem) btnElem.classList.add('active');
+        }
+        
+        const query = (document.getElementById('spare-search')?.value || '').toLowerCase();
+        const activeCompat = this.currentSpareCompat || 'all';
+        
+        document.querySelectorAll('.spare-part-card').forEach(card => {
+            const name = card.getAttribute('data-name');
+            const ref = card.getAttribute('data-ref');
+            const compats = card.getAttribute('data-compat').split(',');
+            
+            const matchQuery = name.includes(query) || ref.includes(query);
+            const matchCompat = activeCompat === 'all' || compats.includes(activeCompat);
+            
+            if(matchQuery && matchCompat) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 };
 
