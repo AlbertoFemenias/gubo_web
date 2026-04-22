@@ -1,0 +1,34 @@
+site_name: "GUBO Maquinaria"
+
+nav:
+  home:
+    ES: "Inicio"
+    EN: "Home"
+  products:
+    ES: "Maquinaria"
+    EN: "Products"
+  gallery:
+    ES: "Galería"
+    EN: "Gallery"
+  contact:
+    ES: "Contacto"
+    EN: "Contact"
+  about:
+    ES: "Nosotros"
+    EN: "About Us"
+  spareparts:
+    ES: "Recambios"
+    EN: "Spare Parts"
+buttons:
+  read_more:
+    ES: "Ver maquinaria"
+    EN: "See machines"
+  see_product:
+    ES: "Ver producto"
+    EN: "See product"
+  download_spec:
+    ES: "Descargar Ficha Técnica"
+    EN: "Download Spec Sheet"
+  contact_us:
+    ES: "Contactar"
+    EN: "Contact Us"

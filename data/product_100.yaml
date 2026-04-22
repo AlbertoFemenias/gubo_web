@@ -1,0 +1,24 @@
+name: "Modelo 100"
+
+description:
+  ES: "Desbrozadora de gran potencia con motor bicilíndrico para terrenos exigentes."
+  EN: "High-power brush cutter with twin-cylinder engine for demanding terrains."
+
+images:
+  - "assets/images/machine_front.webp"
+  - "assets/images/landscape.jpg"
+  - "assets/images/machine_back.jpg"
+
+specs:
+  - ES: "Motores bicilíndrico, Loncin, 764cc respectivamente (25cv)."
+    EN: "Twin-cylinder engines, Loncin, 764cc respectively (25hp)."
+  - ES: "Sistema de tracción híbrido para máxima comodidad y flexibilidad."
+    EN: "Hybrid traction system for maximum comfort and flexibility."
+  - ES: "Ancho de corte de 80cm."
+    EN: "80cm cutting width."
+
+downloads:
+  - label: 
+      ES: "Descargar Ficha Técnica PDF"
+      EN: "Download PDF Spec Sheet"
+    url: "#"

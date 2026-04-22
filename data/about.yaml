@@ -1,0 +1,38 @@
+hero_image: "assets/images/machine_in_the_field.webp"
+
+title:
+  ES: "Sobre Nosotros"
+  EN: "About Us"
+
+subtitle:
+  ES: "El poder del desbroce en tus manos"
+  EN: "The power of the forestry mower at your fingertips"
+
+intro:
+  ES: "GUBO nace con una misión clara: poner la maquinaria de desbroce profesional al alcance de los distribuidores que atienden directamente al usuario final. Somos fabricantes especializados en maquinaria compacta y potente, concebida para el mantenimiento de zonas verdes donde las máquinas tradicionales no son viables."
+  EN: "GUBO was born with a clear mission: to bring professional forestry mowing machinery to the distributors who serve the end user directly. We are manufacturers specializing in compact and powerful machinery, designed for the maintenance of green spaces where traditional machines are not suitable."
+
+sections:
+  - icon: "🌿"
+    heading:
+      ES: "Nuestra Filosofía"
+      EN: "Our Philosophy"
+    text:
+      ES: "Creamos maquinaria profesional para jardín, zona verde y mantenimiento general. Cada máquina GUBO está diseñada para ofrecer el máximo rendimiento en entornos donde la potencia, la compacidad y la fiabilidad son imprescindibles."
+      EN: "We create professional machinery for garden, green spaces and general maintenance. Every GUBO machine is engineered to deliver peak performance in environments where power, compactness and reliability are essential."
+
+  - icon: "🤝"
+    heading:
+      ES: "Nuestro Modelo"
+      EN: "Our Model"
+    text:
+      ES: "Trabajamos con una red de distribuidores locales de confianza, que son quienes se encargan de asesorar al cliente final, gestionar la venta y ofrecer un servicio técnico cercano y especializado."
+      EN: "We work with a trusted network of local distributors, who are responsible for advising the end customer, managing the sale and providing close and specialized technical service."
+
+  - icon: "⚙️"
+    heading:
+      ES: "Ingeniería y Calidad"
+      EN: "Engineering & Quality"
+    text:
+      ES: "Equipadas con motores Loncin de alta cilindrada, sistemas de tracción híbrida y anchos de corte adaptados a cada necesidad, nuestras máquinas son sinónimo de robustez y versatilidad en el campo."
+      EN: "Fitted with high-displacement Loncin engines, hybrid traction systems and cutting widths adapted to each need, our machines are synonymous with robustness and versatility in the field."

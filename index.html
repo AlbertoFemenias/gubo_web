@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUBO Maquinaria Forestal</title>
+    <link rel="icon" type="image/png" href="initial_resources/logos/tab_icon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo-link">
+                <!-- Fallback img while JS loads data, but we can hardcode the logo path since it's static -->
+                <img src="assets/logos/Logo GUBO transparente.png" alt="GUBO Logo" class="nav-logo">
+            </a>
+            
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+            
+            <nav class="nav-links" id="nav-links">
+                <!-- Injected via JS -->
+            </nav>
+            
+            <div class="lang-selector">
+                <button id="lang-es" class="lang-btn active" onclick="app.setLanguage('ES')"><span class="flag">🇪🇸</span></button>
+                <button id="lang-en" class="lang-btn" onclick="app.setLanguage('EN')"><span class="flag">🇬🇧</span></button>
+            </div>
+        </div>
+    </header>
+
+    <main id="app-content">
+        <!-- Content gets dynamically injected here based on the route -->
+        <div class="loader">Cargando...</div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <img src="assets/logos/Logo GUBO transparente.png" alt="GUBO Logo" class="footer-logo">
+                <p id="footer-slogan" class="footer-slogan">El poder del desbroce en tus manos</p>
+            </div>
+            <div class="footer-links">
+                <!-- Dynamically injected navigation links or hardcoded -->
+                <p id="footer-copyright">&copy; <span id="year"></span> GUBO. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal (Outside app-content to avoid CSS transform relative positioning issues) -->
+    <div id="lightbox" class="lightbox" onclick="if(event.target===this) app.closeLightbox()">
+        <button class="lightbox-close" onclick="app.closeLightbox()">×</button>
+        <button class="lightbox-prev" onclick="app.prevLightbox(event)">&#10094;</button>
+        <img id="lightbox-img" class="lightbox-img" src="">
+        <button class="lightbox-next" onclick="app.nextLightbox(event)">&#10095;</button>
+    </div>
+
+    <!-- Libraries -->
+    <script src="assets/js/js-yaml.min.js"></script>
+    
+    <!-- App Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>

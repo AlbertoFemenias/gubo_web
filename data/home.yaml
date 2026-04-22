@@ -1,0 +1,21 @@
+hero_title:
+  ES: "El poder del desbroce en tus manos"
+  EN: "The power of the forestry mower at your fingertips"
+
+hero_subtitle:
+  ES: "Maquinaria profesional para jardín, zona verde y mantenimiento general. Compactas y potentes, concebidas para el mantenimiento de zonas verdes donde las máquinas tradicionales no son convenientes."
+  EN: "Professional machinery for gardens, green areas, and general maintenance. Compact and powerful, designed for the maintenance of green areas where traditional machines are not suitable."
+
+hero_bg: "assets/images/home_background.png"
+
+social_embeds:
+  instagram: 
+    url: "https://www.instagram.com/gubomaquinaria/"
+    title:
+      ES: "Síguenos en Instagram"
+      EN: "Follow us on Instagram"
+  youtube:
+    url: "https://www.youtube.com/embed/rlP2mI5YKQ0"
+    title:
+      ES: "Descubre nuestro poder en acción"
+      EN: "Discover our power in action"
