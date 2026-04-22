@@ -18,7 +18,7 @@ specs:
     EN: "80cm cutting width."
 
 downloads:
-  - label: 
-      ES: "Descargar Ficha Técnica PDF"
-      EN: "Download PDF Spec Sheet"
-    url: "#"
+#  - label: 
+#      ES: "Descargar Ficha Técnica PDF"
+#      EN: "Download PDF Spec Sheet"
+#    url: "#"
